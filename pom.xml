@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.wavemaker.project</groupId>
@@ -11,6 +11,13 @@
                 <filtering>true</filtering>
                 <directory>src/main/resources</directory>
             </resource>
+            <resource>
+                <filtering>true</filtering>
+                <directory>services/sales/src</directory>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
         </resources>
         <finalName>ProfileSettings</finalName>
         <filters>
@@ -18,7 +25,6 @@
         </filters>
         <pluginManagement>
             <plugins>
-                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
                 <plugin>
                     <groupId>org.eclipse.m2e</groupId>
                     <artifactId>lifecycle-mapping</artifactId>
@@ -33,21 +39,20 @@
                                         <versionRange>[1.7,)</versionRange>
                                         <goals>
                                             <goal>run</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
+                    </goals>
+                  </pluginExecutionFilter>
                                     <action>
                                         <ignore/>
-                                    </action>
-                                </pluginExecution>
-                            </pluginExecutions>
-                        </lifecycleMappingMetadata>
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
                     </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
                 <version>2.4.1</version>
                 <executions>
@@ -58,14 +63,13 @@
                 </executions>
                 <configuration>
                     <filesets>
-                        <!-- Cleanup any war:inplace output -->
                         <fileset>
                             <directory>${basedir}/src/main/webapp/WEB-INF/lib</directory>
-                        </fileset>
+            </fileset>
                         <fileset>
                             <directory>${basedir}/src/main/webapp/WEB-INF/classes</directory>
-                        </fileset>
-                    </filesets>
+            </fileset>
+          </filesets>
                 </configuration>
             </plugin>
             <plugin>
@@ -80,13 +84,14 @@
                             <goal>add-source</goal>
                         </goals>
                         <configuration>
-                            <sources/>
+                            <sources>
+                                <source>services/sales/src</source>
+              </sources>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.7</version>
                 <executions>
@@ -99,7 +104,7 @@
                         <configuration>
                             <target>
                                 <ant antfile="${basedir}/build.xml" target="init"/>
-                            </target>
+              </target>
                         </configuration>
                     </execution>
                     <execution>
@@ -120,15 +125,14 @@
                                         <exclude name="target/"/>
                                         <exclude name="src/main/webapp/WEB-INF/lib/"/>
                                         <exclude name="src/main/webapp/WEB-INF/classes/"/>
-                                    </fileset>
-                                </zip>
-                            </target>
+                  </fileset>
+                </zip>
+              </target>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>
                 <configuration>
@@ -139,7 +143,6 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <version>2.10</version>
                 <executions>
@@ -158,8 +161,8 @@
                                     <version>${wavemaker.studio.version}</version>
                                     <classifier>wmapp</classifier>
                                     <type>zip</type>
-                                </artifactItem>
-                            </artifactItems>
+                </artifactItem>
+              </artifactItems>
                         </configuration>
                     </execution>
                 </executions>
@@ -178,7 +181,6 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
     <profiles>
@@ -197,7 +199,6 @@
                 <profile.props.file>production.properties</profile.props.file>
             </properties>
         </profile>
-        <!-- These two are Studio Managed Profiles. DO NOT EDIT THIS PROFILES -->
         <profile>
             <id>runtime-dependency</id>
             <activation>
@@ -213,6 +214,12 @@
                 </dependency>
             </dependencies>
         </profile>
+        <profile>
+            <id>dbprofile</id>
+            <properties>
+                <profile.props.file>dbprofile.properties</profile.props.file>
+            </properties>
+        </profile>
     </profiles>
     <repositories>
         <repository>
@@ -221,13 +228,9 @@
             </snapshots>
             <id>central</id>
             <name>Maven Repository Switchboard</name>
-            <layout>default</layout>
             <url>http://repo1.maven.org/maven2</url>
         </repository>
         <repository>
-            <id>wavemaker-maven-repo</id>
-            <name>wavemaker-maven-repo</name>
-            <url>http://s3.amazonaws.com/maven.wavemaker.com/release</url>
             <releases>
                 <enabled>true</enabled>
                 <checksumPolicy>ignore</checksumPolicy>
@@ -235,13 +238,13 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
+            <id>wavemaker-maven-repo</id>
+            <name>wavemaker-maven-repo</name>
+            <url>http://s3.amazonaws.com/maven.wavemaker.com/release</url>
         </repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
-            <id>wavemaker-maven-repo</id>
-            <name>wavemaker-maven-repo</name>
-            <url>http://s3.amazonaws.com/maven.wavemaker.com/release</url>
             <releases>
                 <enabled>true</enabled>
                 <checksumPolicy>ignore</checksumPolicy>
@@ -249,6 +252,9 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
+            <id>wavemaker-maven-repo</id>
+            <name>wavemaker-maven-repo</name>
+            <url>http://s3.amazonaws.com/maven.wavemaker.com/release</url>
         </pluginRepository>
     </pluginRepositories>
     <dependencies>
@@ -257,6 +263,16 @@
             <artifactId>servlet-api</artifactId>
             <version>2.5</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.38</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>2.3.3</version>
         </dependency>
     </dependencies>
     <dependencyManagement>
@@ -278,9 +294,9 @@
         </dependencies>
     </dependencyManagement>
     <properties>
+        <spring.version>4.2.0.RELEASE</spring.version>
         <profile.props.file>development.properties</profile.props.file>
-        <spring.version>{{spring.version}}</spring.version>
-        <spring.security.version>{{spring.security.version}}</spring.security.version>
-        <wavemaker.studio.version>{{wavemaker.studio.version}}</wavemaker.studio.version>
+        <spring.security.version>3.2.3.RELEASE</spring.security.version>
+        <wavemaker.studio.version>8.3.0.2097</wavemaker.studio.version>
     </properties>
 </project>
